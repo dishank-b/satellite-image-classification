@@ -1,4 +1,4 @@
-tifffile
+rasterio
 opencv-python
 pudb
-
+numpy
