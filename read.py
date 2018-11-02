@@ -19,7 +19,7 @@ classes = {
 }
 org = []
 gt = []
-file = [str(i) for i in range(1,14)]
+file = [str(i) for i in range(14,15)]	# Adjust this for choosing file name
 
 for f in file:
 	print(f)
@@ -49,8 +49,8 @@ for f in file:
 
 org = np.array(org)
 gt = np.array(gt)
-np.save("X.npy", org)
-np.save("Y.npy", gt)
+np.save("X_val.npy", org)	# Adjust this for out file name
+np.save("Y_val.npy", gt)
 pu.db
 
 # col_img = P[: , :, 0:3]
