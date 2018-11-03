@@ -2,3 +2,6 @@ rasterio
 opencv-python
 pudb
 numpy
+tensorflow
+keras
+
