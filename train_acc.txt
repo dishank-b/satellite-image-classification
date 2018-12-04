@@ -1,0 +1,10 @@
+overall acc: 74.5736395307
+acc class 0: 65.5207888276
+acc class 1: 96.5532196544
+acc class 2: 80.1208902167
+acc class 3: 84.4345341111
+acc class 4: 77.1059552564
+acc class 5: 0.000694328722991
+acc class 6: 76.1227674701
+acc class 7: 0.0
+

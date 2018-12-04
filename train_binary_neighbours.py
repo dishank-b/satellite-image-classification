@@ -3,46 +3,58 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation
 from keras.optimizers import SGD
 from keras.callbacks import ModelCheckpoint
-
+import pudb
 import numpy as np
 
-class ValCallback(keras.callbacks.Callback):
-    def __init__(self, test_data):
-        self.test_data = test_data
-
-    def on_epoch_end(self, epoch, logs={}):
-        x, y = self.test_data
-        loss, acc = self.model.evaluate(x, y, verbose=0)
-        print('\nTesting loss: {}, acc: {}\n'.format(loss, acc))
+LABEL_HERE = 5
 
 BATCH_SIZE = 100000
 MAX_ITER = 1000
 
-X_train = np.load("X_woir.npy")
-Y_train = np.load("Y.npy")
+X_train = np.load("X_nb.npy")
+Y_train = np.load("Y_nb.npy")
 
-X_val = np.load("X_val_woir.npy")
-Y_val = np.load("Y_val.npy")
+X_val = np.load("X_nb_val.npy")
+Y_val = np.load("Y_nb_val.npy")
 
-Y_train = keras.utils.to_categorical(Y_train, num_classes = 9)
-Y_val = keras.utils.to_categorical(Y_val, num_classes = 9)
+# pu.db
+
+for i in xrange(len(Y_train)):
+  if (Y_train[i] != LABEL_HERE):
+    Y_train[i] = 0
+  else:
+    Y_train[i] = 1
+
+for i in xrange(len(Y_val)):
+  if (Y_val[i] != LABEL_HERE):
+    Y_val[i] = 0
+  else:
+    Y_val[i] = 1
+
+Y_train = keras.utils.to_categorical(Y_train, num_classes = 2)
+Y_val = keras.utils.to_categorical(Y_val, num_classes = 2)
+
+# Y_train = keras.utils.to_categorical(Y_train, num_classes = 9)
+# Y_val = keras.utils.to_categorical(Y_val, num_classes = 9)
 
 model = Sequential()
 # Dense(64) is a fully-connected layer with 64 hidden units.
 # in the first layer, you must specify the expected input data shape:
 # here, 20-dimensional vectors.
-model.add(Dense(64, activation='relu', input_dim=3))
+model.add(Dense(64, activation='relu', input_dim=36))
 model.add(Dropout(0.3))
 model.add(Dense(64, activation='relu'))
 model.add(Dropout(0.3))
-model.add(Dense(9, activation='softmax'))
+model.add(Dense(9, activation='relu'))
+model.add(Dropout(0.3))
+model.add(Dense(2, activation='softmax'))
 
 sgd = SGD(lr=0.02, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy',
               optimizer=sgd,
               metrics=['accuracy'])
 
-checkpointer = ModelCheckpoint(monitor='val_loss', filepath="check.h5", verbose=True,
+checkpointer = ModelCheckpoint(monitor='val_loss', filepath="binary_nb_cat_"+str(LABEL_HERE)+".h5", verbose=True,
 save_best_only = True)
 
 model.fit(X_train, Y_train,

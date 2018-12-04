@@ -32,15 +32,21 @@ classes = {
 }
 keras.metrics.recall = recall
 
-X_val = np.load("X_val.npy")
+X_nb = np.load("X_nb.npy")
+X = np.load("X.npy")
 result_full = []
 for i in xrange(8):
 	print i
-	model = load_model('models/binary_cat_'+str(i)+'.h5')
-	result = model.predict(X_val)
-	del model
-	# pu.db
-	result = result[...,1]
+	if (i == 1 or i == 2 or i == 3 or i == 4):
+		model = load_model('models/binary_nb_cat_'+str(i)+'.h5')
+		result = model.predict(X_nb)
+		del model
+		result = result[...,1]
+	else:
+		model = load_model('models/binary_cat_'+str(i)+'.h5')
+		result = model.predict(X)
+		del model
+		result = result[...,1]
 	result2 = []
 	for j in xrange(len(result)):
 		result2.append([result[j]])
@@ -52,7 +58,7 @@ for i in xrange(8):
 	
 
 #pu.db
-Y_val = np.load("Y_val.npy")
+Y_val = np.load("Y_nb.npy")
 
 # pu.db
 result = np.argmax(result_full, axis = 1)
@@ -77,8 +83,8 @@ for classes_here in xrange(8):
 	except:
 		print("class "+str(classes_here)+" does not exist")
 # pu.db
-file = ["8", "9", "14"]	# Adjust this for choosing file name
-# file = ["1", "2", "3", "4", "5", "6", "7", "10", "11", "12", "13"]	# Adjust this for choosing file name
+# file = ["8", "9", "14"]	# Adjust this for choosing file name
+file = ["1", "2", "3", "4", "5", "6", "7", "10", "11", "12", "13"]	# Adjust this for choosing file name
 
 for f in file:
 	print(f)
@@ -114,6 +120,6 @@ for f in file:
 	# pu.db
 	plt.imshow(img)
 	# plt.show()
-	plt.imsave("./nb_"+f+".png",img)
+	plt.imsave("./best_"+f+".png",img)
 
 print acc

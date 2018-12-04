@@ -32,14 +32,13 @@ classes = {
 }
 keras.metrics.recall = recall
 
-X_val = np.load("X_val.npy")
+X_val = np.load("X_nb_val.npy")
 result_full = []
 for i in xrange(8):
 	print i
-	model = load_model('models/binary_cat_'+str(i)+'.h5')
+	model = load_model('models/binary_nb_cat_'+str(i)+'.h5')
 	result = model.predict(X_val)
 	del model
-	# pu.db
 	result = result[...,1]
 	result2 = []
 	for j in xrange(len(result)):
@@ -52,7 +51,7 @@ for i in xrange(8):
 	
 
 #pu.db
-Y_val = np.load("Y_val.npy")
+Y_val = np.load("Y_nb_val.npy")
 
 # pu.db
 result = np.argmax(result_full, axis = 1)

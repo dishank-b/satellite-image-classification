@@ -22,8 +22,8 @@ classes = {
 model = load_model('models/with_ir.h5')
 
 
-X_val = np.load("X.npy")
-Y_val = np.load("Y.npy")
+X_val = np.load("X_val.npy")
+Y_val = np.load("Y_val.npy")
 Y_val = keras.utils.to_categorical(Y_val, num_classes = 9)
 
 
@@ -34,7 +34,7 @@ result = model.predict(X_val)
 result = np.argmax(result, axis = 1)
 
 # pu.db
-file = [str(i) for i in range(1, 14)]	# Adjust this for choosing file name
+file = [str(i) for i in range(14, 15)]	# Adjust this for choosing file name
 
 for f in file:
 	print(f)
@@ -70,4 +70,4 @@ for f in file:
 	# pu.db
 	plt.imshow(img)
 	# plt.show()
-	plt.imsave("outputs/"+f+".png",img)
+	plt.imsave("./"+f+".png",img)

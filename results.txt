@@ -1,0 +1,10 @@
+acc class 0: 52.4462787052
+acc class 1: 98.0794385294
+acc class 2: 55.9789111576
+acc class 3: 23.5958963658
+acc class 4: 53.7282915115
+class 5 does not exist
+class 6 does not exist
+class 7 does not exist
+acc class 8: 60.34897987
+

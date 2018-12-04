@@ -32,53 +32,26 @@ classes = {
 }
 keras.metrics.recall = recall
 
-X_val = np.load("X_val.npy")
-result_full = []
-for i in xrange(8):
-	print i
-	model = load_model('models/binary_cat_'+str(i)+'.h5')
-	result = model.predict(X_val)
-	del model
-	# pu.db
-	result = result[...,1]
-	result2 = []
-	for j in xrange(len(result)):
-		result2.append([result[j]])
-	result = np.array(result2)
-	if i == 0:
-		result_full = result
-	else:
-		result_full = np.append(result_full, result, axis = 1)
-	
+X_val = np.load("X.npy")
+
+model = load_model('models/binary_cat_7.h5')
+result = model.predict(X_val)
+del model
+result = result[...,1]
 
 #pu.db
-Y_val = np.load("Y_val.npy")
+Y_val = np.load("Y.npy")
 
 # pu.db
-result = np.argmax(result_full, axis = 1)
+# result = np.argmax(result_full, axis = 1)
 
 true_list = result == Y_val
 
 acc = float(sum(true_list)) * 100 /sum(Y_val != 8)
 print ("overall acc: "+str(acc))
 
-for classes_here in xrange(8):
-	result_only_this = result == classes_here
-	print("result_only_this: ", sum(result_only_this))
-	actual_only_this = Y_val == classes_here
-	print("actual_only_this: ", sum(actual_only_this))
-	counter_here = 0
-	for j in xrange(len(result_only_this)):
-		if (result_only_this[j] == True and actual_only_this[j] == True):
-			counter_here+=1
-	try:
-		acc_here = float(counter_here) * 100 / sum(actual_only_this)
-		print("acc class "+str(classes_here)+": "+str(acc_here))
-	except:
-		print("class "+str(classes_here)+" does not exist")
-# pu.db
-file = ["8", "9", "14"]	# Adjust this for choosing file name
-# file = ["1", "2", "3", "4", "5", "6", "7", "10", "11", "12", "13"]	# Adjust this for choosing file name
+# file = ["8", "9", "14"]	# Adjust this for choosing file name
+file = ["1", "2", "3", "4", "5", "6", "7", "10", "11", "12", "13"]	# Adjust this for choosing file name
 
 for f in file:
 	print(f)
@@ -97,9 +70,14 @@ for f in file:
 	# pu.db
 	for each in result_here:
 		# print each
-		r.append(classes[str(each)][0])
-		g.append(classes[str(each)][1])
-		b.append(classes[str(each)][2])
+		if each > (np.mean(result_here) + 1.5 * np.std(result_here)):
+			r.append(classes["7"][0])
+			g.append(classes["7"][1])
+			b.append(classes["7"][2])
+		else:
+			r.append(classes["8"][0])
+			g.append(classes["8"][1])
+			b.append(classes["8"][2])
 
 	r = np.reshape(r, shape_)
 	g = np.reshape(g, shape_)
@@ -114,6 +92,6 @@ for f in file:
 	# pu.db
 	plt.imshow(img)
 	# plt.show()
-	plt.imsave("./nb_"+f+".png",img)
+	plt.imsave("./yellow_"+f+".png",img)
 
 print acc

@@ -25,33 +25,38 @@ MAX_ITER = 1000
 
 X_train_mod = np.load("X.npy")
 Y_train_mod = np.load("Y.npy")
-X_train = np.array([])
-Y_train = np.array([])
+X_train = []
+Y_train = []
 
 # pu.db
 
 X_val_mod = np.load("X_val.npy")
 Y_val_mod = np.load("Y_val.npy")
-X_val = np.array([])
-Y_val = np.array([])
+X_val = []
+Y_val = []
 
 for i in xrange(len(Y_train_mod)):
   print(str(i)+" out of "+str(len(Y_train_mod)))
   if (Y_train_mod[i] != LABEL_HERE and (Y_train_mod[i] != 0 or Y_train_mod[i] != 4)):
-    Y_train = np.append(Y_train, 0)
-    X_train = np.append(X_train, X_train_mod[i])
+    Y_train.append(0)
+    X_train.append(X_train_mod[i])
   elif Y_train_mod[i] == LABEL_HERE:
-    Y_train = np.append(Y_train, 1)
-    X_train = np.append(X_train, X_train_mod[i])
+    Y_train.append(1)
+    X_train.append(X_train_mod[i])
 
 for i in xrange(len(Y_val_mod)):
   print(str(i)+" out of "+str(len(Y_val_mod)))
   if (Y_val_mod[i] != LABEL_HERE and (Y_val_mod[i] != 0 or Y_val_mod[i] != 4)):
-    Y_val = np.append(Y_val, 0)
-    X_val = np.append(X_val, X_val_mod[i])
+    Y_val.append(0)
+    X_val.append(X_val_mod[i])
   elif Y_val_mod[i] == LABEL_HERE:
-    Y_val = np.append(Y_val, 1)
-    X_val = np.append(X_val, X_val_mod[i])
+    Y_val.append(1)
+    X_val.append(X_val_mod[i])
+
+X_train = np.array(X_train)
+Y_train = np.array(Y_train)
+X_val = np.array(X_val)
+Y_val = np.array(Y_val)
 
 Y_train = keras.utils.to_categorical(Y_train, num_classes = 2)
 Y_val = keras.utils.to_categorical(Y_val, num_classes = 2)
