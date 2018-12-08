@@ -35,21 +35,37 @@ for f in file:
 	gt_r, gt_g, gt_b = gt_data.read()
 	r, g, b, ir = r.astype(float), g.astype(float), b.astype(float), ir.astype(float)
 
-	img = np.zeros((r.shape[0], r.shape[1], 3))
 
-	r /= np.max(r)
-	g/= np.max(g)
-	b/= np.max(b)
-	ir /= np.max(ir)
+	num_rows, num_cols = r.shape[0], r.shape[1]
+	r, g, b, ir = r.flatten(), g.flatten(), b.flatten(), ir.flatten()
 
-	img[...,0] = r
-	img[...,1] = g
-	img[...,2] = b
+	sigma = np.std(r)
+	meu = np.mean(r)
+	r += meu - 2*sigma
+	r = r / (4*sigma)
+	r[r>1.0] = 1.0
+	r[r<0.0] = 0.0
 
-	plt.imshow(img)
-	plt.show()
+	sigma = np.std(g)
+	meu = np.mean(g)
+	g += meu - 2*sigma
+	g = g / (4*sigma)
+	g[g>1.0] = 1.0
+	g[g<0.0] = 0.0
 
-	sys.exit(0)
+	sigma = np.std(b)
+	meu = np.mean(b)
+	b += meu - 2*sigma
+	b = b / (4*sigma)
+	b[b>1.0] = 1.0
+	b[b<0.0] = 0.0
+
+	sigma = np.std(ir)
+	meu = np.mean(ir)
+	ir += meu - 2*sigma
+	ir = ir / (4*sigma)
+	ir[ir>1.0] = 1.0
+	ir[ir<0.0] = 0.0
 
 	r, g, b, ir = r.flatten(), g.flatten(), b.flatten(), ir.flatten()
 	gt_r, gt_g, gt_b = gt_r.flatten(), gt_g.flatten(), gt_b.flatten()

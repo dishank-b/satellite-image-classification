@@ -23,21 +23,21 @@ LABEL_HERE = 7
 BATCH_SIZE = 100000
 MAX_ITER = 1000
 
-X_train_mod = np.load("X.npy")
-Y_train_mod = np.load("Y.npy")
+X_train_mod = np.load("X_nb.npy")
+Y_train_mod = np.load("Y_nb.npy")
 X_train = []
 Y_train = []
 
 # pu.db
 
-X_val_mod = np.load("X_val.npy")
-Y_val_mod = np.load("Y_val.npy")
+X_val_mod = np.load("X_nb_val.npy")
+Y_val_mod = np.load("Y_nb_val.npy")
 X_val = []
 Y_val = []
 
 for i in xrange(len(Y_train_mod)):
   print(str(i)+" out of "+str(len(Y_train_mod)))
-  if (Y_train_mod[i] != LABEL_HERE and (Y_train_mod[i] != 0 or Y_train_mod[i] != 4)):
+  if (Y_train_mod[i] != LABEL_HERE and Y_train_mod[i] != 0 and Y_train_mod[i] != 4 and Y_train_mod[i] != 8):
     Y_train.append(0)
     X_train.append(X_train_mod[i])
   elif Y_train_mod[i] == LABEL_HERE:
@@ -46,7 +46,7 @@ for i in xrange(len(Y_train_mod)):
 
 for i in xrange(len(Y_val_mod)):
   print(str(i)+" out of "+str(len(Y_val_mod)))
-  if (Y_val_mod[i] != LABEL_HERE and (Y_val_mod[i] != 0 or Y_val_mod[i] != 4)):
+  if (Y_val_mod[i] != LABEL_HERE and Y_val_mod[i] != 0 and Y_val_mod[i] != 4 and Y_train_mod[i] != 8):
     Y_val.append(0)
     X_val.append(X_val_mod[i])
   elif Y_val_mod[i] == LABEL_HERE:
@@ -68,11 +68,15 @@ model = Sequential()
 # Dense(64) is a fully-connected layer with 64 hidden units.
 # in the first layer, you must specify the expected input data shape:
 # here, 20-dimensional vectors.
-model.add(Dense(64, activation='relu', input_dim=4))
+model.add(Dense(128, activation='selu', input_dim=36))
 model.add(Dropout(0.3))
-model.add(Dense(64, activation='relu'))
+model.add(Dense(128, activation='selu'))
 model.add(Dropout(0.3))
-model.add(Dense(9, activation='relu'))
+model.add(Dense(128, activation='selu'))
+model.add(Dropout(0.3))
+model.add(Dense(64, activation='selu'))
+model.add(Dropout(0.3))
+model.add(Dense(9, activation='selu'))
 model.add(Dropout(0.3))
 model.add(Dense(2, activation='softmax'))
 
@@ -81,7 +85,7 @@ model.compile(loss='categorical_crossentropy',
               optimizer=sgd,
               metrics=['accuracy', recall])
 
-checkpointer = ModelCheckpoint(monitor='val_loss', filepath="binary_"+str(LABEL_HERE)+".h5", verbose=True,
+checkpointer = ModelCheckpoint(monitor='val_loss', filepath="binary_cat_only_"+str(LABEL_HERE)+".h5", verbose=True,
 save_best_only = True)
 
 model.fit(X_train, Y_train,

@@ -18,40 +18,30 @@ def recall(y_true, y_pred):
     recall = true_positives / (possible_positives + K.epsilon())
     return recall
 
-LABEL_HERE = 7
+LABEL_HERE = 2
 
 BATCH_SIZE = 100000
 MAX_ITER = 1000
 
-X_train_mod = np.load("X.npy")
-Y_train_mod = np.load("Y.npy")
-X_train = np.array([])
-Y_train = np.array([])
+X_train = np.load("X.npy")
+Y_train = np.load("Y.npy")
 
 # pu.db
 
-X_val_mod = np.load("X_val.npy")
-Y_val_mod = np.load("Y_val.npy")
-X_val = np.array([])
-Y_val = np.array([])
+X_val = np.load("X_val.npy")
+Y_val = np.load("Y_val.npy")
 
-for i in xrange(len(Y_train_mod)):
-  print(str(i)+" out of "+str(len(Y_train_mod)))
-  if (Y_train_mod[i] != LABEL_HERE and (Y_train_mod[i] != 0 or Y_train_mod[i] != 4)):
-    Y_train = np.append(Y_train, 0)
-    X_train = np.append(X_train, X_train_mod[i])
-  elif Y_train_mod[i] == LABEL_HERE:
-    Y_train = np.append(Y_train, 1)
-    X_train = np.append(X_train, X_train_mod[i])
+for i in xrange(len(Y_train)):
+  if (Y_train[i] != LABEL_HERE):
+    Y_train[i] = 0
+  else:
+    Y_train[i] = 1
 
-for i in xrange(len(Y_val_mod)):
-  print(str(i)+" out of "+str(len(Y_val_mod)))
-  if (Y_val_mod[i] != LABEL_HERE and (Y_val_mod[i] != 0 or Y_val_mod[i] != 4)):
-    Y_val = np.append(Y_val, 0)
-    X_val = np.append(X_val, X_val_mod[i])
-  elif Y_val_mod[i] == LABEL_HERE:
-    Y_val = np.append(Y_val, 1)
-    X_val = np.append(X_val, X_val_mod[i])
+for i in xrange(len(Y_val)):
+  if (Y_val[i] != LABEL_HERE):
+    Y_val[i] = 0
+  else:
+    Y_val[i] = 1
 
 Y_train = keras.utils.to_categorical(Y_train, num_classes = 2)
 Y_val = keras.utils.to_categorical(Y_val, num_classes = 2)
@@ -63,11 +53,15 @@ model = Sequential()
 # Dense(64) is a fully-connected layer with 64 hidden units.
 # in the first layer, you must specify the expected input data shape:
 # here, 20-dimensional vectors.
-model.add(Dense(64, activation='relu', input_dim=4))
+model.add(Dense(128, activation='selu', input_dim=4))
 model.add(Dropout(0.3))
-model.add(Dense(64, activation='relu'))
+model.add(Dense(128, activation='selu'))
 model.add(Dropout(0.3))
-model.add(Dense(9, activation='relu'))
+model.add(Dense(128, activation='selu'))
+model.add(Dropout(0.3))
+model.add(Dense(64, activation='selu'))
+model.add(Dropout(0.3))
+model.add(Dense(9, activation='selu'))
 model.add(Dropout(0.3))
 model.add(Dense(2, activation='softmax'))
 
@@ -76,7 +70,7 @@ model.compile(loss='categorical_crossentropy',
               optimizer=sgd,
               metrics=['accuracy', recall])
 
-checkpointer = ModelCheckpoint(monitor='val_loss', filepath="binary_"+str(LABEL_HERE)+".h5", verbose=True,
+checkpointer = ModelCheckpoint(monitor='val_loss', filepath="binary_cat_"+str(LABEL_HERE)+".h5", verbose=True,
 save_best_only = True)
 
 model.fit(X_train, Y_train,

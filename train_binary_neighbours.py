@@ -6,7 +6,7 @@ from keras.callbacks import ModelCheckpoint
 import pudb
 import numpy as np
 
-LABEL_HERE = 5
+LABEL_HERE = 7
 
 BATCH_SIZE = 100000
 MAX_ITER = 1000
@@ -41,11 +41,15 @@ model = Sequential()
 # Dense(64) is a fully-connected layer with 64 hidden units.
 # in the first layer, you must specify the expected input data shape:
 # here, 20-dimensional vectors.
-model.add(Dense(64, activation='relu', input_dim=36))
+model.add(Dense(128, activation='selu', input_dim=36))
 model.add(Dropout(0.3))
-model.add(Dense(64, activation='relu'))
+model.add(Dense(128, activation='selu'))
 model.add(Dropout(0.3))
-model.add(Dense(9, activation='relu'))
+model.add(Dense(128, activation='selu'))
+model.add(Dropout(0.3))
+model.add(Dense(64, activation='selu'))
+model.add(Dropout(0.3))
+model.add(Dense(9, activation='selu'))
 model.add(Dropout(0.3))
 model.add(Dense(2, activation='softmax'))
 
