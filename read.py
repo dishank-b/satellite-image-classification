@@ -20,8 +20,8 @@ classes = {
 }
 org = []
 gt = []
-# file = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 14]	# Adjust this for choosing file name
-file = [8, 9, 13]	# Adjust this for choosing file name
+file = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 14]	# Adjust this for choosing file name
+#file = [8, 9, 13]	# Adjust this for choosing file name
 
 for f in file:
 	print(f)
@@ -43,29 +43,29 @@ for f in file:
 	meu = np.mean(r)
 	r += meu - 2*sigma
 	r = r / (4*sigma)
-	r[r>1.0] = 1.0
-	r[r<0.0] = 0.0
+	#r[r>1.0] = 1.0
+	#r[r<0.0] = 0.0
 
 	sigma = np.std(g)
 	meu = np.mean(g)
 	g += meu - 2*sigma
 	g = g / (4*sigma)
-	g[g>1.0] = 1.0
-	g[g<0.0] = 0.0
+	#g[g>1.0] = 1.0
+	#g[g<0.0] = 0.0
 
 	sigma = np.std(b)
 	meu = np.mean(b)
 	b += meu - 2*sigma
 	b = b / (4*sigma)
-	b[b>1.0] = 1.0
-	b[b<0.0] = 0.0
+	#b[b>1.0] = 1.0
+	#b[b<0.0] = 0.0
 
 	sigma = np.std(ir)
 	meu = np.mean(ir)
 	ir += meu - 2*sigma
 	ir = ir / (4*sigma)
-	ir[ir>1.0] = 1.0
-	ir[ir<0.0] = 0.0
+	#ir[ir>1.0] = 1.0
+	#ir[ir<0.0] = 0.0
 
 	r, g, b, ir = r.flatten(), g.flatten(), b.flatten(), ir.flatten()
 	gt_r, gt_g, gt_b = gt_r.flatten(), gt_g.flatten(), gt_b.flatten()
@@ -78,8 +78,8 @@ for f in file:
 
 org = np.array(org)
 gt = np.array(gt)
-np.save("X_val.npy", org)	# Adjust this for out file name
-np.save("Y_val.npy", gt)
+np.save("X.npy", org)	# Adjust this for out file name
+np.save("Y.npy", gt)
 # pu.db
 
 # col_img = P[: , :, 0:3]

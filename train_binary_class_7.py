@@ -23,15 +23,15 @@ LABEL_HERE = 7
 BATCH_SIZE = 100000
 MAX_ITER = 1000
 
-X_train_mod = np.load("X_nb.npy")
-Y_train_mod = np.load("Y_nb.npy")
+X_train_mod = np.load("X.npy")
+Y_train_mod = np.load("Y.npy")
 X_train = []
 Y_train = []
 
 # pu.db
 
-X_val_mod = np.load("X_nb_val.npy")
-Y_val_mod = np.load("Y_nb_val.npy")
+X_val_mod = np.load("X_val.npy")
+Y_val_mod = np.load("Y_val.npy")
 X_val = []
 Y_val = []
 
@@ -68,15 +68,11 @@ model = Sequential()
 # Dense(64) is a fully-connected layer with 64 hidden units.
 # in the first layer, you must specify the expected input data shape:
 # here, 20-dimensional vectors.
-model.add(Dense(128, activation='selu', input_dim=36))
+model.add(Dense(64, activation='relu', input_dim=4))
 model.add(Dropout(0.3))
-model.add(Dense(128, activation='selu'))
+model.add(Dense(64, activation='relu'))
 model.add(Dropout(0.3))
-model.add(Dense(128, activation='selu'))
-model.add(Dropout(0.3))
-model.add(Dense(64, activation='selu'))
-model.add(Dropout(0.3))
-model.add(Dense(9, activation='selu'))
+model.add(Dense(9, activation='relu'))
 model.add(Dropout(0.3))
 model.add(Dense(2, activation='softmax'))
 
